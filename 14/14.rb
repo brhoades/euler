@@ -1,6 +1,6 @@
 num = 1000000
   
-def collatz( n )
+def collatz(n)
   i = 0
 
   while
@@ -10,7 +10,7 @@ def collatz( n )
       if n == 1
         break
       end
-      n = 3*n+1
+      n = 3 * n + 1
     end
 
     i += 1
@@ -19,16 +19,16 @@ def collatz( n )
   i
 end
 
-def max_collatz( num )
+def max_collatz(num)
   nums = Array.new
 
   1.upto(num) do |i|
-    nums.push( collatz i )
+    nums.push(collatz i)
   end
 
   nums
 end
 
-list = max_collatz( num ) 
+list = max_collatz(num) 
 max = list.max
-p max.to_s + " " + ( list.index( max ) + 1 ).to_s
+p max.to_s + " " + (list.index(max) + 1).to_s
