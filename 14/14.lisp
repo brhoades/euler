@@ -7,9 +7,6 @@
   (setf maxn 0)
   (setf maxi 0)
   (loop for i from 0 upto (- (length colz) 1) do
-   (progn 
-     ;(print i)
-     ;(print (nth i colz))
     (if (= (mod i 2) 1)
       nil
       (if (> (nth (+ i 1) colz) maxn)
@@ -19,7 +16,7 @@
         )
         nil
       )
-    ))
+    )
   )
   (return-from longest_collatz (list (+ maxn 1) maxi))
 )
