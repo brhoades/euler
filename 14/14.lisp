@@ -2,10 +2,8 @@
   (declare (optimize (speed 3) (safety 0)))
   (setf colz (list 0 0))
   (loop for i from 1 upto nmax do
-  (progn
-    (print i)
     (setf colz (append colz (list i (collatz i)))
-  )))
+  ))
   (setf maxn 0)
   (setf maxi 0)
   (loop for i from 1 upto (length colz) do
@@ -40,11 +38,4 @@
     )
   )
 )
-
-
-(progn
-(print (longest_collatz 10000))
-(quit)
-)
-
 
