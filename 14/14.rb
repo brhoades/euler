@@ -1,5 +1,3 @@
-num = 1000000
-  
 def collatz( n )
   i = 0
 
@@ -19,16 +17,15 @@ def collatz( n )
   i
 end
 
-def max_collatz( num )
+def longest_collatz( num )
   nums = Array.new
 
   1.upto(num) do |i|
     nums.push( collatz i )
   end
-
-  nums
+  max = nums.max
+  
+  [(max+1), (nums.index(max)+1)]
 end
 
-list = max_collatz( num ) 
-max = list.max
-p max.to_s + " " + ( list.index( max ) + 1 ).to_s
+load "runner.rb"
