@@ -10,7 +10,6 @@ def collatz( n )
       end
       n = 3*n+1
     end
-
     i += 1
   end
 
