@@ -80,25 +80,24 @@ def eSieve( x )
   list = list[2..-1]
 end
 
-RubyProf.start
-pr = primesUpTo 1000000
-res = RubyProf.stop
+#RubyProf.start
+#pr = primesUpTo 1000000
+#res = RubyProf.stop
 
-print( "Bruteforce: ", "\n" )
+#print( "Bruteforce: ", "\n" )
 #print( pr, "\n" )
-printer = RubyProf::FlatPrinter.new res
-printer.print STDOUT
-print "\n\n\n"
+#printer = RubyProf::FlatPrinter.new res
+#printer.print STDOUT
+#print "\n\n\n"
 
-RubyProf.start
-pr2 = eSieve 1000000
-res = RubyProf.stop
+#RubyProf.start
+#pr2 = eSieve 1000000
+#res = RubyProf.stop
 
-print( "E's Sieve", "\n" )
+#print( "E's Sieve", "\n" )
 #print( pr2, "\n" )
-printer = RubyProf::FlatPrinter.new res
-printer.print STDOUT
-print "\n\n\n"
+#printer = RubyProf::FlatPrinter.new res
+#printer.print STDOUT
+#print "\n\n\n"
 
-
-print "EQUAL: " + ( pr == pr2 ).to_s + "\n"
+#print "EQUAL: " + ( pr == pr2 ).to_s + "\n"
