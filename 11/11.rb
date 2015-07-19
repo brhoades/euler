@@ -1,5 +1,102 @@
 require 'awesome_print'
 
+class Grid
+  attr_accessor :data
+
+  def initialize(problem)
+    list = problem.split("\n").map! { |l| l.split(" ").map! { |n| n = n.to_i } }
+
+    y = 0
+    @data = []
+    # data is a 2d array of tiles
+    list.each do |row|
+      @data << []
+      x = 0
+      row.each do |entry|
+        @data.last << Tile.new(entry, self, y, x)
+        x += 1
+      end
+      y += 1
+    end
+
+    print @data.size, "x", @data.last.size, "\n"
+  end
+
+  def [](key)
+    if key >= data.size
+      throw :out_of_bounds
+    end
+
+    data[key]
+  end
+end
+
+class Tile
+  attr_accessor :row, :col
+
+  def initialize(data, grid, row, col)
+    @data = data
+    @parent = grid
+    @row = row
+    @col = col
+  end
+
+  def right
+    if @col == @parent.data.size - 1
+      throw :out_of_bounds
+    else
+      @parent[@row][@col+1] 
+    end
+  end
+
+  # assuming square input
+  def down
+    if @row == @parent.data.size - 1
+      throw :out_of_bounds
+    else
+      @parent[@row+1][@col]
+    end
+  end
+
+  # assuming square input
+  def rdia
+    if @col == @parent.data.size - 1 or @row == @parent.data.size - 1
+      throw out_of_bounds
+    else
+      @parent[@row+1][@col+1]
+    end
+  end
+
+  # assuming square input
+  def ldia
+    if @col == 0 or @row == @parent.data.size - 1
+      throw out_of_bounds
+    else
+      @parent[@row+1][@col-1]
+    end
+  end
+
+  def canRight?
+    @col < @parent.data.size - 3
+  end
+
+  def canDown?
+    @row < @parent.data.size - 3
+  end
+
+  def canRDiagonal?
+    @col < @parent.data.size - 3 and @row < @parent.data.size - 3
+  end
+
+  def canLDiagonal?
+    @col > 2 and @row < @parent.data.size - 3
+  end
+
+  def to_i
+    @data.to_i
+  end
+end
+
 # From problem statement
 problem = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 49 49 99 40 17 81 18 57 60 87 17 40 98 43 69 48 04 56 62 00
@@ -22,42 +119,53 @@ problem = "08 02 22 97 38 15 00 40 00 75 04 05 07 78 52 12 50 77 91 08
 20 73 35 29 78 31 90 01 74 31 49 71 48 86 81 16 23 57 05 54
 01 70 54 71 83 51 54 69 16 92 33 48 61 43 52 01 89 19 67 48"
 
-list = problem.split( "\n" ).map! { |l| l.split( " " ).map! { |n| n = n.to_i } }
+grid = Grid.new problem
 
-$maxproduct = 0
+#ap grid.data.map { |r| r.map { |t| t.to_i } }
 
-list.each do |r|
-  j = list.index r 
-  r.each do |rc|
-    i = r.index rc
-    # Search left to right
-    if i < r.size - 4
-      testmax = r[i] * r[i+1] * r[i+2] * r[i+3]
+maxproduct = 0
+# now look through all entries and the values around them
+grid.data.each do |row|
+  row.each do |tile|
+  next if tile.to_i < 1
+    # Check Below
+    if tile.canDown?
+      thisproduct = tile.to_i * tile.down.to_i * tile.down.down.to_i * tile.down.down.down.to_i
 
-      if testmax > $maxproduct
-        $maxproduct = testmax
+      if thisproduct > maxproduct
+        maxproduct = thisproduct
       end
     end
 
-    # Search up and down
-    if j < list.size-4
-      testmax = list[j][i] * list[j+1][i] * list[j+2][i] * list[j+3][i]
-      
-      if testmax > $maxproduct
-        $maxproduct = testmax
+    # Check Right
+    if tile.canRight?
+      thisproduct = tile.to_i * tile.right.to_i * tile.right.right.to_i * tile.right.right.right.to_i
+
+      if thisproduct > maxproduct
+        maxproduct = thisproduct
       end
     end
 
-    # Search diagonally
-    if j < list.size-4 and i < r.size-4
-      testmax = list[j][i] * list[j+1][i+1] * list[j+2][i+2] * list[j+3][i+3]
+    # Check Right Diagonal
+    if tile.canRDiagonal?
+      thisproduct = tile.to_i * tile.rdia.to_i * tile.rdia.rdia.to_i * tile.rdia.rdia.rdia.to_i
 
-      if testmax > $maxproduct
-        $maxproduct = testmax
+      if thisproduct > maxproduct
+        maxproduct = thisproduct
+      end
+    end
+
+    # Check Left Diagonal
+    if tile.canLDiagonal?
+      thisproduct = tile.to_i * tile.ldia.to_i * tile.ldia.ldia.to_i * tile.ldia.ldia.ldia.to_i
+
+      if thisproduct > maxproduct
+        maxproduct = thisproduct
       end
     end
   end
 end
 
 
-print $maxproduct
+print maxproduct, "\n\n"
+
