@@ -1,5 +1,3 @@
-require "ruby-prof"
-
 def isPrime?( x, list )
   sq = Math::sqrt x
 
