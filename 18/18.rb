@@ -29,7 +29,7 @@ class Tree
     data.each do |level|
       thisnodes = [ ]
       if level.size == 1
-        @root = Node.new(level[0], nil)
+        @root = Node.new(level[0], [nil])
         @lastnodes << @root
         next
       end
@@ -47,9 +47,19 @@ class Tree
   end
 end
 
+# this effectively compares the passed node's parents' parents'... nth parents sum.
+# It branches out up to a total depth of the passed depth argument.
+#
+#TODO: cache calculated parent values at each node... this may include storing "best"
+#paths. Alternatively, use a pathfinding algorithm.
 def largestParentSum( node, depth )
   depth -= 1
-  sum = node.to_i
+
+  if node != nil 
+    sum = node.to_int
+  else
+    return 0
+  end
 
   if depth <= 0
     return sum
@@ -63,15 +73,34 @@ def largestParentSum( node, depth )
 end
 
 tree = Tree.new ARGV[0]
-depth = ARGV[1]
+depth = ARGV[1].to_i
 
 sum = 0
-
+node = nil
+largestsum = -1
 # choose the start node--- node with the largest parent sum within depth
 tree.lastnodes.each do |n|
-
+  tsum = largestParentSum( n, depth )
+  if tsum > largestsum
+    largestsum = tsum
+    node = n
+  end
 end
 
-while node != tree.root
-  
+# Now walk up and choose nodes by doing sums with a diminishing depth of depth
+while node != nil
+  sum += node.to_int
+  if node.parents.size > 1
+    lsize = largestParentSum( node.parents.first, depth )
+    rsize = largestParentSum( node.parents.last, depth )
+    if lsize > rsize
+      node = node.parents.first
+    else
+      node = node.parents.last
+    end
+  else
+    node = node.parents.first
+  end
 end
+
+print sum
