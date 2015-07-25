@@ -1,5 +1,3 @@
-require 'awesome_print'
-
 class Fixnum
   def d
     sum = 1 # for ourself / 1
