@@ -38,7 +38,7 @@ int main()
   {
     int sum = 0;
     for(int j=0; j<strlen(words[i]); j++)
-      sum += 1 + 'Z' - words[i][j];
+      sum += 27 - ( 'Z' - words[i][j] + 1 );
     score += sum*(i+1);
   }
 
